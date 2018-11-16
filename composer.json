@@ -1,0 +1,29 @@
+{
+    "name": "stratedge/visa",
+    "description": "A complimentary extension of the official Laravel Passport package.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jarret Byrne",
+            "email": "jarret@solvomedia.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "laravel/passport": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.4"
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+                "laravel/passport"
+            ],
+            "providers": [
+                "Stratedge\\Visa\\VisaServiceProvider"
+            ]
+        }
+    }
+}
