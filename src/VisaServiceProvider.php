@@ -18,7 +18,7 @@ class VisaServiceProvider extends BaseServiceProvider
         // non-incrementing string
         Passport::useClientModel(Client::class);
 
-        $this->loadViewsFrom(basepath('vendor/laravel/passport/resources/views'), 'passport');
+        $this->loadViewsFrom(base_path('vendor/laravel/passport/resources/views'), 'passport');
 
         $this->deleteCookieOnLogout();
 
@@ -30,11 +30,11 @@ class VisaServiceProvider extends BaseServiceProvider
             ], 'passport-migrations');
 
             $this->publishes([
-                basepath('vendor/laravel/passport/resources/views') => base_path('resources/views/vendor/passport'),
+                base_path('vendor/laravel/passport/resources/views') => base_path('resources/views/vendor/passport'),
             ], 'passport-views');
 
             $this->publishes([
-                basepath('vendor/laravel/passport/resources/js/components') => base_path('resources/js/components/passport'),
+                base_path('vendor/laravel/passport/resources/js/components') => base_path('resources/js/components/passport'),
             ], 'passport-components');
 
             $this->commands([
