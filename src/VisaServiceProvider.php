@@ -1,6 +1,6 @@
 <?php
 
-namespace Stratedge\Passport;
+namespace Stratedge\Visa;
 
 use Laravel\Passport\Passport;
 use Laravel\Passport\PassportServiceProvider as BaseServiceProvider;
