@@ -2,6 +2,7 @@
 
 namespace Stratedge\Visa;
 
+use Laravel\Passport\Client as BaseClient;
 use Laravel\Passport\Passport;
 use Laravel\Passport\PassportServiceProvider as BaseServiceProvider;
 
@@ -15,8 +16,11 @@ class VisaServiceProvider extends BaseServiceProvider
     public function boot()
     {
         // Use the Visa Client model that expects the ID to be a
-        // non-incrementing string
-        Passport::useClientModel(Client::class);
+        // non-incrementing string if the default Client model is still
+        // registered
+        if (Passport::$clientModel === BaseClient::class) {
+            Passport::useClientModel(Client::class);
+        }
 
         $this->loadViewsFrom(base_path('vendor/laravel/passport/resources/views'), 'passport');
 
