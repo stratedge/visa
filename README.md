@@ -9,7 +9,8 @@ A complimentary extension of the official Laravel Passport package.
 
 Visa provides the following functionality:
 
-* Use a random string or UUID for Client ID
+* Use a random string or UUID for Client ID; and
+* Provide the `CheckFirstPartyClient` middleware class to authenticate a client as a first party client
 
 # Installation
 
@@ -31,11 +32,11 @@ From here, complete all the typical [Passport installation steps](https://larave
 
 To configure core Passport features, refer to the [Passport documentation](https://laravel.com/docs/master/passport). Since Visa uses Passport, you're free to configure whatever you want from Passport.
 
-## Use Random Strings for Client ID
+## Using Random Strings for Client ID
 
 By default Visa will use random 40-character strings for client IDs, the same as the client secrets. No configuration required.
 
-## Use UUIDs for Client ID
+## Using UUIDs for Client ID
 
 Visa also supports UUIDs for client IDs, but must be configured to do so before migrations are run so that the migrations specify the correct column type for `client_id`.
 
@@ -74,6 +75,18 @@ class AppServiceProvider extends ServiceProvider
 }
 
 ```
+
+## Using the `CheckFirstPartyClient` Middleware
+
+To use the `CheckFirstPartyClient` middleware, add the following middleware to the `$routeMiddleware` property of your `app/Http/Kernel.php` file:
+
+```php
+protected $routeMiddleware = [
+    'auth.first-party' => \Stratedge\Visa\Http\Middleware\CheckFirstPartyClient::class,
+];
+```
+
+The middleware can then be registered for any route or route group with the key `auth.first-party`. Any clients that are not considered first-party that attempt to authenticate with endpoints assigned the `CheckFirstPartyClient` middleware will fail with an authentication error.
 
 # Extension Philosophy
 
