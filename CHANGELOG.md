@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 ### Added
 
+- Add `enableCustomGrants()` method to the `VisaServiceProvider` to make adding custom grants easier
 - Allow switching off the built-in Passport error handling with `Visa::disablePassportErrorHandling()`
 - Replace `AccessTokenController` to use the replacement `HandlesOAuthErrors` trait
 - Replace `ApproveAuthorizationController` to use the replacement `HandlesOAuthErrors` trait
