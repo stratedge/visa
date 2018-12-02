@@ -20,7 +20,7 @@ trait HandlesOAuthErrors
      */
     protected function withErrorHandling($callback)
     {
-        if (Visa::$passportErrorHandlingEnabled !== true) {
+        if (Visa::$passportErrorHandlingDisabled === true) {
             return $callback();
         } else {
             return parent::withErrorHandling($callback);

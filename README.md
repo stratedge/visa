@@ -9,9 +9,10 @@ A complimentary extension of the official Laravel Passport package.
 
 Visa provides the following functionality:
 
-* Use a random string (default) or UUID for Client ID;
+* Use a random string for Client ID;
+* Add configuration to use a UUID for Client ID instead of a random string;
 * Provide the `CheckFirstPartyClient` middleware class to authenticate a client as a first party client; and
-* Override Passport's default error handlers so that errors bubble to the global error handler (default) or allow the built-in Passport error handling to deal with errors.
+* Add configuration to use the global Laravel error handler to handle errors thrown by Passport instead of Passport's built-in handler.
 
 # Installation
 
@@ -41,7 +42,7 @@ By default Visa will use random 40-character strings for client IDs, the same as
 
 ## Using UUIDs for Client ID
 
-Visa also supports UUIDs for client IDs, but must be configured to do so before migrations are run so that the migrations specify the correct column type for `client_id`.
+Visa also supports UUIDs for client IDs, but must be configured to do so _before migrations are run_ so that the migrations specify the correct column type for `client_id`.
 
 To use UUIDs, call `\Stratedge\Visa\Visa::enableClientUUIDs()` in the `boot()` method of your `AppServiceProvider`:
 
@@ -93,9 +94,7 @@ The middleware can then be registered for any route or route group with the key 
 
 ## Error Handling
 
-By default, Visa will not catch errors thrown by Passport's controllers. As a result the global error handler will catch and handle all errors.
-
-If you wish to use Passport's built-in error handling functionality that comes standard with Passport, call `\Stratedge\Visa\Visa::enablePassportErrorHandling()` in the `boot()` method of your `AppServiceProvider`:
+By default, Visa will use the built-in Passport error handler that will catch and respond to errors automatically. If you wish to disable the built-in handler and use the global Laravel error handler to control the logging and output of errors, call `\Stratedge\Visa\Visa::disablePassportErrorHandling()` in the `boot()` method of your `AppServiceProvider`:
 
 ```php
 <?php
@@ -114,8 +113,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Use the standard Passport error handling
-        Visa::enablePassportErrorHandling();
+        // Do not use the standard Passport error handling
+        Visa::disablePassportErrorHandling();
     }
 
     /**

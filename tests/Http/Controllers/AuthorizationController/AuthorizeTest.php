@@ -17,8 +17,88 @@ use Throwable;
 
 class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
 {
-    public function testDoesNotCatchExceptionsByDefault()
+    public function testHandlesExceptionsByDefault()
     {
+        $server = $this->getMockBuilder(AuthorizationServer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validateAuthorizationRequest'])
+            ->getMock();
+
+        $server->expects($this->once())
+            ->method('validateAuthorizationRequest')
+            ->will($this->throwException(new Exception));
+
+        $this->app->instance(AuthorizationServer::class, $server);
+
+        $controller = $this->app->make(AuthorizationController::class);
+
+        $result = $controller->authorize(
+            $this->app->make(ServerRequestInterface::class),
+            $this->app->make(Request::class),
+            $this->app->make(ClientRepository::class),
+            $this->app->make(TokenRepository::class)
+        );
+
+        $this->assertInstanceOf(Response::class, $result);
+        $this->assertSame(500, $result->getStatusCode());
+    }
+
+    public function testHandlesThrowablesByDefault()
+    {
+        $server = $this->getMockBuilder(AuthorizationServer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validateAuthorizationRequest'])
+            ->getMock();
+
+        $server->expects($this->once())
+            ->method('validateAuthorizationRequest')
+            ->will($this->throwException(new Error));
+
+        $this->app->instance(AuthorizationServer::class, $server);
+
+        $controller = $this->app->make(AuthorizationController::class);
+
+        $result = $controller->authorize(
+            $this->app->make(ServerRequestInterface::class),
+            $this->app->make(Request::class),
+            $this->app->make(ClientRepository::class),
+            $this->app->make(TokenRepository::class)
+        );
+
+        $this->assertInstanceOf(Response::class, $result);
+        $this->assertSame(500, $result->getStatusCode());
+    }
+
+    public function testHandlesOAuthExceptionsByDefault()
+    {
+        $server = $this->getMockBuilder(AuthorizationServer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['validateAuthorizationRequest'])
+            ->getMock();
+
+        $server->expects($this->once())
+            ->method('validateAuthorizationRequest')
+            ->will($this->throwException(OAuthServerException::unsupportedGrantType()));
+
+        $this->app->instance(AuthorizationServer::class, $server);
+
+        $controller = $this->app->make(AuthorizationController::class);
+
+        $result = $controller->authorize(
+            $this->app->make(ServerRequestInterface::class),
+            $this->app->make(Request::class),
+            $this->app->make(ClientRepository::class),
+            $this->app->make(TokenRepository::class)
+        );
+
+        $this->assertInstanceOf(Response::class, $result);
+        $this->assertSame(400, $result->getStatusCode());
+    }
+
+    public function testDoesNotCatchExceptionsWhenConfigured()
+    {
+        Visa::disablePassportErrorHandling();
+
         $this->expectException(Exception::class);
 
         $server = $this->getMockBuilder(AuthorizationServer::class)
@@ -42,8 +122,10 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
         );
     }
 
-    public function testDoesNotCatchThrowablesByDefault()
+    public function testDoesNotCatchThrowablesWhenConfigured()
     {
+        Visa::disablePassportErrorHandling();
+
         $this->expectException(Throwable::class);
 
         $server = $this->getMockBuilder(AuthorizationServer::class)
@@ -67,8 +149,10 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
         );
     }
 
-    public function testDoesNotCatchOAuthExceptionsByDefault()
+    public function testDoesNotCatchOAuthExceptionsWhenConfigured()
     {
+        Visa::disablePassportErrorHandling();
+
         $this->expectException(OAuthServerException::class);
 
         $server = $this->getMockBuilder(AuthorizationServer::class)
@@ -90,98 +174,5 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
             $this->app->make(ClientRepository::class),
             $this->app->make(TokenRepository::class)
         );
-    }
-
-    public function testHandlesExceptionsWhenConfigured()
-    {
-        Visa::enablePassportErrorHandling();
-
-        $server = $this->getMockBuilder(AuthorizationServer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['validateAuthorizationRequest'])
-            ->getMock();
-
-        $server->expects($this->once())
-            ->method('validateAuthorizationRequest')
-            ->will($this->throwException(new Exception));
-
-        $this->app->instance(AuthorizationServer::class, $server);
-
-        $controller = $this->app->make(AuthorizationController::class);
-
-        $result = $controller->authorize(
-            $this->app->make(ServerRequestInterface::class),
-            $this->app->make(Request::class),
-            $this->app->make(ClientRepository::class),
-            $this->app->make(TokenRepository::class)
-        );
-
-        $this->assertInstanceOf(Response::class, $result);
-        $this->assertSame(500, $result->getStatusCode());
-
-        // Reset configuration
-        Visa::$passportErrorHandlingEnabled = false;
-    }
-
-    public function testHandlesThrowablesWhenConfigured()
-    {
-        Visa::enablePassportErrorHandling();
-
-        $server = $this->getMockBuilder(AuthorizationServer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['validateAuthorizationRequest'])
-            ->getMock();
-
-        $server->expects($this->once())
-            ->method('validateAuthorizationRequest')
-            ->will($this->throwException(new Error));
-
-        $this->app->instance(AuthorizationServer::class, $server);
-
-        $controller = $this->app->make(AuthorizationController::class);
-
-        $result = $controller->authorize(
-            $this->app->make(ServerRequestInterface::class),
-            $this->app->make(Request::class),
-            $this->app->make(ClientRepository::class),
-            $this->app->make(TokenRepository::class)
-        );
-
-        $this->assertInstanceOf(Response::class, $result);
-        $this->assertSame(500, $result->getStatusCode());
-
-        // Reset configuration
-        Visa::$passportErrorHandlingEnabled = false;
-    }
-
-    public function testHandlesOAuthExceptionsWhenConfigured()
-    {
-        Visa::enablePassportErrorHandling();
-
-        $server = $this->getMockBuilder(AuthorizationServer::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['validateAuthorizationRequest'])
-            ->getMock();
-
-        $server->expects($this->once())
-            ->method('validateAuthorizationRequest')
-            ->will($this->throwException(OAuthServerException::unsupportedGrantType()));
-
-        $this->app->instance(AuthorizationServer::class, $server);
-
-        $controller = $this->app->make(AuthorizationController::class);
-
-        $result = $controller->authorize(
-            $this->app->make(ServerRequestInterface::class),
-            $this->app->make(Request::class),
-            $this->app->make(ClientRepository::class),
-            $this->app->make(TokenRepository::class)
-        );
-
-        $this->assertInstanceOf(Response::class, $result);
-        $this->assertSame(400, $result->getStatusCode());
-
-        // Reset configuration
-        Visa::$passportErrorHandlingEnabled = false;
     }
 }

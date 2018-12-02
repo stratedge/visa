@@ -4,6 +4,7 @@ namespace Stratedge\Visa\Test;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\MySqlConnection;
+use Stratedge\Visa\Visa;
 use Stratedge\Wye\Wye;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -31,6 +32,10 @@ class TestCase extends \Orchestra\Testbench\TestCase
         });
 
         parent::setUp();
+
+        // Reset configuration
+        Visa::$clientUUIDsEnabled = false;
+        Visa::$passportErrorHandlingDisabled = false;
     }
 
     /**

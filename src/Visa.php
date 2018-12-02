@@ -12,12 +12,12 @@ class Visa
     public static $clientUUIDsEnabled = false;
 
     /**
-     * Indicates if the default Passport error handling should be used for OAuth
-     * errors.
+     * Indicates if the default Passport error handling should be ignored for
+     * OAuth errors in controllers that use the HandlesOAuthErrors trait.
      *
      * @var boolean
      */
-    public static $passportErrorHandlingEnabled = false;
+    public static $passportErrorHandlingDisabled = false;
 
     /**
      * Configure Visa to use UUIDs for client IDs.
@@ -37,9 +37,9 @@ class Visa
      *
      * @return static
      */
-    public static function enablePassportErrorHandling()
+    public static function disablePassportErrorHandling()
     {
-        static::$passportErrorHandlingEnabled = true;
+        static::$passportErrorHandlingDisabled = true;
 
         return new static;
     }
