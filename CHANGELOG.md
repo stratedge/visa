@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## Unreleased
+## [Unreleased]
+
+- No pending changes
+
+## 7.0.0 - 2018-12-02
 ### Added
 
 - Add `enableCustomGrants()` method to the `VisaServiceProvider` to make adding custom grants easier
@@ -18,3 +22,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Replace `Client` class to set `$incrementing` to `false` in support of string or UUID client IDs
 - Replace `ClientRepository` class to support creating clients with random strings or UUIDs
 - Replace migrations to support string or UUID client IDs
+
+[Unreleased]: https://github.com/stratedge/visa/compare/v7.0.0...HEAD

@@ -15,6 +15,14 @@ Visa provides the following functionality:
 * Add configuration to use the global Laravel error handler to handle errors thrown by Passport instead of Passport's built-in handler; and
 * Provide overwrite-able `enableCustomGrants()` method in the service provider to make registering custom grants easier.
 
+# Passport Compatability
+
+While this library mostly adheres to semantic versioning, major version numbers are set to align to major versions for the Passport library. This simplifies determining which version of Visa includes which version of Passport.
+
+| Visa Version | Configured Passport Version |
+| ------------ | --------------------------- |
+| 7.*          | ^7.0                        |
+
 # Installation
 
 Visa is registered with [Packagist](https://packagist.org) and can be installed with [Composer](https://getcomposer.org). Run the following on the command line:
