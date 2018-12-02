@@ -90,5 +90,20 @@ class VisaServiceProvider extends BaseServiceProvider
             \Laravel\Passport\ClientRepository::class,
             \Stratedge\Visa\ClientRepository::class
         );
+
+        $this->app->bind(
+            \Laravel\Passport\Http\Controllers\AccessTokenController::class,
+            \Stratedge\Visa\Http\Controllers\AccessTokenController::class
+        );
+
+        $this->app->bind(
+            \Laravel\Passport\Http\Controllers\ApproveAuthorizationController::class,
+            \Stratedge\Visa\Http\Controllers\ApproveAuthorizationController::class
+        );
+
+        $this->app->bind(
+            \Laravel\Passport\Http\Controllers\AuthorizationController::class,
+            \Stratedge\Visa\Http\Controllers\AuthorizationController::class
+        );
     }
 }
