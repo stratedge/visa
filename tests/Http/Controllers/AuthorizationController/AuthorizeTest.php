@@ -1,6 +1,6 @@
 <?php
 
-namespace Stratedge\Visa\Test\Http\Controllers\AuthoriZationcontrolLer;
+namespace Stratedge\Visa\Test\Http\Controllers\AuthorizationController;
 
 use Error;
 use Exception;
@@ -11,7 +11,7 @@ use Laravel\Passport\TokenRepository;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Psr\Http\Message\ServerRequestInterface;
-use Stratedge\Visa\Http\Controllers\AuthoriZationcontrolLer;
+use Stratedge\Visa\Http\Controllers\AuthorizationController;
 use Stratedge\Visa\Visa;
 use Throwable;
 
@@ -32,7 +32,7 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
 
         $this->app->instance(AuthorizationServer::class, $server);
 
-        $controller = $this->app->make(AuthoriZationcontrolLer::class);
+        $controller = $this->app->make(AuthorizationController::class);
 
         $controller->authorize(
             $this->app->make(ServerRequestInterface::class),
@@ -57,7 +57,7 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
 
         $this->app->instance(AuthorizationServer::class, $server);
 
-        $controller = $this->app->make(AuthoriZationcontrolLer::class);
+        $controller = $this->app->make(AuthorizationController::class);
 
         $controller->authorize(
             $this->app->make(ServerRequestInterface::class),
@@ -82,7 +82,7 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
 
         $this->app->instance(AuthorizationServer::class, $server);
 
-        $controller = $this->app->make(AuthoriZationcontrolLer::class);
+        $controller = $this->app->make(AuthorizationController::class);
 
         $controller->authorize(
             $this->app->make(ServerRequestInterface::class),
@@ -107,7 +107,7 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
 
         $this->app->instance(AuthorizationServer::class, $server);
 
-        $controller = $this->app->make(AuthoriZationcontrolLer::class);
+        $controller = $this->app->make(AuthorizationController::class);
 
         $result = $controller->authorize(
             $this->app->make(ServerRequestInterface::class),
@@ -138,7 +138,7 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
 
         $this->app->instance(AuthorizationServer::class, $server);
 
-        $controller = $this->app->make(AuthoriZationcontrolLer::class);
+        $controller = $this->app->make(AuthorizationController::class);
 
         $result = $controller->authorize(
             $this->app->make(ServerRequestInterface::class),
@@ -169,7 +169,7 @@ class AuthorizeTest extends \Stratedge\Visa\Test\TestCase
 
         $this->app->instance(AuthorizationServer::class, $server);
 
-        $controller = $this->app->make(AuthoriZationcontrolLer::class);
+        $controller = $this->app->make(AuthorizationController::class);
 
         $result = $controller->authorize(
             $this->app->make(ServerRequestInterface::class),
