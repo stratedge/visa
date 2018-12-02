@@ -11,8 +11,9 @@ Visa provides the following functionality:
 
 * Use a random string for Client ID;
 * Add configuration to use a UUID for Client ID instead of a random string;
-* Provide the `CheckFirstPartyClient` middleware class to authenticate a client as a first party client; and
-* Add configuration to use the global Laravel error handler to handle errors thrown by Passport instead of Passport's built-in handler.
+* Provide the `CheckFirstPartyClient` middleware class to authenticate a client as a first party client;
+* Add configuration to use the global Laravel error handler to handle errors thrown by Passport instead of Passport's built-in handler; and
+* Provide overwrite-able `enableCustomGrants()` method in the service provider to make registering custom grants easier.
 
 # Installation
 
@@ -129,6 +130,36 @@ class AppServiceProvider extends ServiceProvider
 }
 
 ```
+
+## Enabling Custom Grants
+
+In order to use your own custom grants, you must extend the `Stratedge\Visa\VisaServiceProvider` class and overload the `enableCustomGrants()` method.
+
+The method accepts a single parameter of type `League\OAuth2\Server\AuthorizationServer` that will be injected automatically as the argument `$server`. Use the `enableGrantType()` method of the `AuthorizationServer` class to enable new grant types.
+
+```php
+<?php
+
+namespace App\Providers;
+
+use Stratedge\Visa\VisaServiceProvider as BaseProvider;
+
+class VisaServiceProvider extends BaseProvider
+{
+    /**
+     * Enables any additional custom grants when overloaded.
+     *
+     * @param  AuthorizationServer $server
+     * @return void
+     */
+    public function enableCustomGrants(AuthorizationServer $server)
+    {
+        $server->enableGrantType(/* Register custom grant here */);
+    }
+}
+```
+
+> **PLEASE NOTE:** When extending the service provider, be sure to register your custom `VisaServiceProvider` in the `app.php` configuration file and turn off the auto-discovery of the default provider provided by this library through your `composer.json` file.
 
 # Extension Philosophy
 

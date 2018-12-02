@@ -4,6 +4,7 @@ namespace Stratedge\Visa\Test;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\MySqlConnection;
+use Laravel\Passport\Passport;
 use Stratedge\Visa\Visa;
 use Stratedge\Wye\Wye;
 
@@ -34,6 +35,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         parent::setUp();
 
         // Reset configuration
+        Passport::$implicitGrantEnabled = false;
         Visa::$clientUUIDsEnabled = false;
         Visa::$passportErrorHandlingDisabled = false;
     }
