@@ -9,8 +9,10 @@ A complimentary extension of the official Laravel Passport package.
 
 Visa provides the following functionality:
 
-* Use a random string or UUID for Client ID; and
-* Provide the `CheckFirstPartyClient` middleware class to authenticate a client as a first party client
+* Use a random string for Client ID;
+* Add configuration to use a UUID for Client ID instead of a random string;
+* Provide the `CheckFirstPartyClient` middleware class to authenticate a client as a first party client; and
+* Add configuration to use the global Laravel error handler to handle errors thrown by Passport instead of Passport's built-in handler.
 
 # Installation
 
@@ -26,7 +28,9 @@ For versions of Laravel that support auto-registration of packages, Visa will au
 
 > No need to include Passport's service provider, the Visa provider extends it.
 
-From here, complete all the typical [Passport installation steps](https://laravel.com/docs/master/passport#installation). **PLEASE NOTE:** See configuration below to ensure you complete any optional Visa configurations before running migrations to ensure columns are created with the correct types.
+From here, complete all the typical [Passport installation steps](https://laravel.com/docs/master/passport#installation).
+
+> **PLEASE NOTE:** See configuration below to ensure you complete any optional Visa configurations before running migrations to ensure columns are created with the correct types.
 
 # Configuration
 
@@ -38,7 +42,7 @@ By default Visa will use random 40-character strings for client IDs, the same as
 
 ## Using UUIDs for Client ID
 
-Visa also supports UUIDs for client IDs, but must be configured to do so before migrations are run so that the migrations specify the correct column type for `client_id`.
+Visa also supports UUIDs for client IDs, but must be configured to do so _before migrations are run_ so that the migrations specify the correct column type for `client_id`.
 
 To use UUIDs, call `\Stratedge\Visa\Visa::enableClientUUIDs()` in the `boot()` method of your `AppServiceProvider`:
 
@@ -78,7 +82,7 @@ class AppServiceProvider extends ServiceProvider
 
 ## Using the `CheckFirstPartyClient` Middleware
 
-To use the `CheckFirstPartyClient` middleware, add the following middleware to the `$routeMiddleware` property of your `app/Http/Kernel.php` file:
+To use the `CheckFirstPartyClient` middleware, add the following middleware to the `$routeMiddleware` property of your `App\Http\Kernel` class:
 
 ```php
 protected $routeMiddleware = [
@@ -87,6 +91,44 @@ protected $routeMiddleware = [
 ```
 
 The middleware can then be registered for any route or route group with the key `auth.first-party`. Any clients that are not considered first-party that attempt to authenticate with endpoints assigned the `CheckFirstPartyClient` middleware will fail with an authentication error.
+
+## Error Handling
+
+By default, Visa will use the built-in Passport error handler that will catch and respond to errors automatically. If you wish to disable the built-in handler and use the global Laravel error handler to control the logging and output of errors, call `\Stratedge\Visa\Visa::disablePassportErrorHandling()` in the `boot()` method of your `AppServiceProvider`:
+
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Stratedge\Visa\Visa;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        // Do not use the standard Passport error handling
+        Visa::disablePassportErrorHandling();
+    }
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+}
+
+```
 
 # Extension Philosophy
 
